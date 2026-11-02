@@ -212,6 +212,11 @@ dialog .foot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
       <input id="lemail" type="email" autocomplete="email" required placeholder="voce@email.com">
       <button class="btn" id="lbtn" type="submit">Receber link de acesso</button>
       <div id="lmsg" role="status"></div>
+      <div id="codeBox" hidden>
+        <label class="l" for="lcode">Ou digite o código do e-mail</label>
+        <input id="lcode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456">
+        <button class="btn leaf" id="lcodeBtn" type="button">Entrar com o código</button>
+      </div>
       <p class="small">Ainda não é aluno? <a href="index.html">Conheça a aula gratuita</a></p>
     </form>
   </div>
@@ -237,6 +242,7 @@ dialog .foot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
 <script src="config.js"></script>
 <script>
 const C = window.CNP || {};
+const URL0 = location.hash.slice(1) + "&" + location.search.slice(1);
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const TZ = {timeZone:"America/Sao_Paulo"};
@@ -276,8 +282,25 @@ $("loginForm").addEventListener("submit", async e => {
   $("lmsg").className = "msg " + (error ? "err" : "ok");
   $("lmsg").textContent = error
     ? (/rate|limit|seconds/i.test(error.message) ? "Muitos pedidos seguidos. Espere 1 minuto e tente de novo." : "Não foi possível enviar agora. Confira o e-mail e tente de novo.")
-    : "Pronto! Abra o e-mail que enviamos para " + email + " e clique no link. Confira também o spam.";
+    : "Pronto! Abra o e-mail que enviamos para " + email + " e clique no link mais recente (cada novo pedido invalida o anterior). Confira também o spam.";
+  if(!error) $("codeBox").hidden = false;
 });
+$("lcodeBtn").addEventListener("click", async () => {
+  const email = $("lemail").value.trim().toLowerCase(), token = $("lcode").value.replace(/\D/g,"");
+  if(!email || token.length < 6){ $("lmsg").className="msg err"; $("lmsg").textContent="Digite o e-mail e o código de 6 dígitos."; return; }
+  const { data, error } = await sb.auth.verifyOtp({ email, token, type:"email" });
+  if(error){ $("lmsg").className="msg err"; $("lmsg").textContent="Código inválido ou expirado. Peça um novo link."; return; }
+  if(data.session && !entrou){ entrou = true; entrar(data.session); }
+});
+function erroDoLink(){
+  const h = new URLSearchParams(URL0);
+  if(!h.get("error") && !h.get("error_code")) return;
+  history.replaceState(null, "", location.pathname);
+  $("lmsg").className = "msg err";
+  $("lmsg").textContent = /expired|invalid/i.test(h.get("error_code")+" "+h.get("error_description"))
+    ? "Este link expirou ou já foi usado. Peça um novo link abaixo e clique no mais recente."
+    : "Não foi possível entrar com este link. Peça um novo.";
+}
 async function sair(){ await sb.auth.signOut(); location.hash=""; location.reload(); }
 $("sair").addEventListener("click", sair);
 
@@ -658,7 +681,7 @@ sb.auth.onAuthStateChange((ev, session) => {
   await carregaSettingsPublicas();
   const { data: { session } } = await sb.auth.getSession();
   if(session){ if(!entrou){ entrou = true; entrar(session); } }
-  else { $("boot").hidden = true; $("login").hidden = false; }
+  else { $("boot").hidden = true; $("login").hidden = false; erroDoLink(); }
 })();
 </script>
 </body>
