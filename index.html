@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta property="og:title" content="Aula gratuita para médicos · Cannabis medicinal na prática">
+<meta property="og:description" content="Por que o seu paciente de cannabis some depois do primeiro frasco. Ao vivo, com Dr. André Filipe.">
+<title>Aula Cannabis na Prática</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Aula ao vivo e gratuita para médicos: escolha da quimiovariante, cálculo de dose em gotas e acompanhamento que faz o paciente voltar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap">
+<style>
+/* Layout: hero escuro no verde Holy Green → faixas creme alternadas → formulário em cartão → rodapé escuro. Página única, mobile first. */
+:root{
+  --deep:#032322;      /* verde profundo do logo */
+  --deep-2:#0b3330;
+  --cream:#efddcf;     /* creme do logotipo */
+  --cream-2:#f7eee6;
+  --leaf:#afbf7e;      /* folha */
+  --leaf-ink:#4e6128;
+  --ink:#0f2422; --muted:#56635f; --line:#e2d4c7; --card:#fffaf6; --err:#b4472c;
+  --bg:var(--cream-2);
+  --f-display:"Quicksand","Nunito","Segoe UI",system-ui,sans-serif;
+  --f-body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#061d1c;--cream-2:#0a2826;--card:#0e302d;--ink:#efe6dd;--muted:#a9b6b0;--line:#1f4440;--leaf-ink:#c4d39a;--err:#f0957a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#061d1c;--cream-2:#0a2826;--card:#0e302d;--ink:#efe6dd;--muted:#a9b6b0;--line:#1f4440;--leaf-ink:#c4d39a;--err:#f0957a;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55}
+.in{max-width:1080px;margin:0 auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em;text-wrap:balance;margin:0}
+.eyebrow{font:600 12px/1.2 var(--f-body);letter-spacing:.14em;text-transform:uppercase}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--leaf);outline-offset:3px;border-radius:6px}
+/* faixa */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--leaf);color:var(--deep)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--leaf)}
+.bar .in{padding-block:9px;display:flex;gap:10px 18px;align-items:center;justify-content:center;flex-wrap:wrap;text-align:center}
+.bar b{font-weight:700}
+.bar a{font-weight:600;text-decoration:none;border-bottom:1.5px solid currentColor}
+/* hero */
+.hero{background:var(--deep);color:var(--cream);position:relative;overflow:hidden}
+.hero .in{padding-block:56px 64px;display:grid;grid-template-columns:1.25fr .9fr;gap:40px;align-items:center}
+.hero .eyebrow{color:var(--leaf)}
+.hero h1{font-size:clamp(34px,5.4vw,58px);line-height:1.04;margin:14px 0 18px;color:var(--cream)}
+.hero h1 em{font-style:normal;color:var(--leaf)}
+.hero p.lead{font-size:clamp(17px,2vw,19px);max-width:56ch;color:#e6d6c8;margin:0 0 26px}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--leaf);color:var(--deep);font:700 17px var(--f-display);padding:15px 26px;border-radius:999px;border:0;cursor:pointer;text-decoration:none}
+.btn:hover{filter:brightness(1.06)}
+.btn svg{width:18px;height:18px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:22px;color:#cdbdaf;font-size:14.5px}
+.meta span{display:inline-flex;gap:7px;align-items:center}
+.sprout{position:absolute;right:-60px;top:-40px;width:340px;opacity:.07;pointer-events:none}
+/* contagem */
+.count{background:var(--deep-2);border:1px solid #1d4a45;border-radius:22px;padding:22px}
+.count .eyebrow{color:var(--leaf)}
+.clock{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 10px}
+.clock div{background:var(--deep);border-radius:14px;padding:12px 4px;text-align:center}
+.clock b{display:block;font:700 30px var(--f-display);color:var(--cream);font-variant-numeric:tabular-nums}
+.clock span{font-size:11.5px;color:#a9b8b2;text-transform:uppercase;letter-spacing:.08em}
+.count p{margin:0;font-size:14px;color:#cdbdaf}
+.count .when{font:700 18px var(--f-display);color:var(--cream);margin-top:2px}
+/* seções */
+section.s{padding-block:64px}
+section.s h2{font-size:clamp(26px,3.4vw,36px);margin-bottom:8px}
+.sub{color:var(--muted);max-width:60ch;margin:0 0 28px}
+.learn{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.lc{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 22px 20px;min-width:0}
+.lc .n{font:700 13px var(--f-display);color:var(--leaf-ink);letter-spacing:.06em}
+.lc h3{font-size:20px;margin:6px 0 6px}
+.lc p{margin:0;color:var(--muted)}
+/* ferramenta */
+.tool{background:var(--deep);color:var(--cream);border-radius:28px;padding:30px;display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
+.tool h2{color:var(--cream)}
+.tool .sub{color:#cdbdaf}
+.tool .eyebrow{color:var(--leaf)}
+.oils{display:grid;gap:12px}
+.oil{background:var(--deep-2);border:1px solid #1d4a45;border-radius:16px;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center}
+.oil .nm{font-weight:600}
+.oil .sp{font-size:13px;color:#a9b8b2}
+.oil .mg{grid-row:1/3;grid-column:2;text-align:right;font:700 26px var(--f-display);color:var(--leaf);font-variant-numeric:tabular-nums}
+.oil .mg small{display:block;font:500 11.5px var(--f-body);color:#a9b8b2}
+.rng{display:flex;flex-direction:column;gap:8px;margin:6px 0 18px}
+.rng label{display:flex;justify-content:space-between;font-size:14px;color:#cdbdaf}
+.rng output{font:700 20px var(--f-display);color:var(--cream)}
+input[type=range]{width:100%;accent-color:var(--leaf)}
+.diff{font:600 15px var(--f-body);color:var(--cream);background:#14403b;border-radius:12px;padding:12px 14px;margin-top:12px}
+.fine{font-size:12px;color:#93a6a0;margin-top:10px}
+/* para quem / quem conduz */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+ul.ck{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+ul.ck li{display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:start}
+ul.ck li::before{content:"";width:22px;height:22px;border-radius:50%;margin-top:2px;background:var(--leaf) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23032322' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center/13px no-repeat}
+.small{font-size:13.5px;color:var(--muted);margin-top:14px}
+.who{display:grid;grid-template-columns:120px 1fr;gap:20px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px}
+.photo{width:120px;height:120px;border-radius:50%;background:var(--deep);color:var(--leaf);display:grid;place-items:center;font:700 36px var(--f-display);overflow:hidden}
+.photo img{width:100%;height:100%;object-fit:cover}
+.who h3{font-size:22px}
+.who p{margin:6px 0 0;color:var(--muted);font-size:14.5px}
+.plat{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px;background:var(--deep);border-radius:16px;padding:12px 16px;color:#cdbdaf;font-size:14px}
+.plat img{height:30px;width:auto}
+.gift{margin-top:18px;background:var(--leaf);color:var(--deep);border-radius:22px;padding:22px}
+.gift h3{font-size:20px}
+.gift p{margin:6px 0 0}
+/* formulário */
+.formwrap{background:var(--deep);padding-block:64px}
+.formwrap h2{color:var(--cream)}
+.formwrap .sub{color:#cdbdaf}
+.fcard{background:var(--card);color:var(--ink);border-radius:26px;padding:28px;max-width:680px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}
+.f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.f.full{grid-column:1/-1}
+.f label,.f legend{font-weight:600;font-size:14px}
+.f input,.f select{font:16px var(--f-body);padding:12px 13px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+.f input:focus,.f select:focus{border-color:var(--leaf-ink)}
+.f .e{color:var(--err);font-size:13px;min-height:0}
+.f.bad input,.f.bad select{border-color:var(--err)}
+.chk{display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:14.5px;align-items:start;cursor:pointer}
+.chk input{width:20px;height:20px;margin-top:2px;accent-color:var(--deep)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.fcard .btn{width:100%;justify-content:center;background:var(--deep);color:var(--cream);margin-top:6px}
+.fcard .btn[disabled]{opacity:.6;cursor:wait}
+.micro{font-size:12.5px;color:var(--muted);margin:10px 0 0;text-align:center}
+.ok{text-align:left}
+.ok h3{font-size:26px;margin-bottom:8px}
+.ok .btn{background:var(--leaf);color:var(--deep);width:auto;margin:16px 10px 0 0}
+.ok .btn.alt{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
+.notice{font-size:13px;color:var(--muted);margin-top:16px}
+.demo{background:#fdf0d5;color:#5b4310;border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:16px}
+/* rodapé */
+footer{background:var(--deep);color:#a9b8b2;border-top:1px solid #1d4a45;font-size:13.5px}
+footer .in{padding-block:26px;display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+footer b{color:var(--cream)}
+footer button{background:none;border:0;color:var(--leaf);font:inherit;cursor:pointer;text-decoration:underline;padding:0}
+/* privacidade */
+dialog{border:0;border-radius:22px;padding:0;max-width:min(720px,calc(100% - 32px));background:var(--card);color:var(--ink)}
+dialog::backdrop{background:rgba(3,35,34,.6)}
+dialog .dc{padding:26px;max-height:80vh;overflow:auto}
+dialog h2{font-size:22px;margin-bottom:10px}
+dialog p,dialog li{font-size:14.5px}
+@media (max-width:860px){
+  .hero .in,.tool,.two{grid-template-columns:1fr}
+  .learn{grid-template-columns:1fr}
+}
+@media (max-width:520px){
+  .grid{grid-template-columns:1fr}
+  .who{grid-template-columns:1fr}
+  .fcard,.tool{padding:20px}
+  .clock b{font-size:24px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+
+<div class="bar"><div class="in"><span><b>AULA AO VIVO E GRATUITA PARA MÉDICOS</b> · <span data-k="dataCurta"></span> · <span data-k="hora"></span> (Brasília)</span><a href="#inscricao">Garantir vaga</a><a href="aluno.html">Área do aluno</a></div></div>
+
+<header class="hero">
+  <svg class="sprout" viewBox="0 0 100 100" aria-hidden="true"><path d="M48 92C30 70 28 40 46 8c14 24 16 52 2 84z" fill="#afbf7e"/><path d="M54 90c4-22 18-38 42-40-6 22-22 36-42 40z" fill="#afbf7e"/></svg>
+  <div class="in">
+    <div>
+      <div class="eyebrow">Cannabis medicinal na prática · Dr. André Filipe</div>
+      <h1>Por que o seu paciente de cannabis <em>some depois do primeiro frasco</em></h1>
+      <p class="lead">Em 75 minutos: como escolher a quimiovariante, calcular a dose em gotas e montar um acompanhamento que faz o paciente voltar. Com demonstração ao vivo da plataforma.</p>
+      <a class="btn" href="#inscricao">Quero minha vaga <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <div class="meta"><span>● Ao vivo pelo Zoom</span><span>● 75 minutos</span><span>● Para médicos</span><span>● Gratuita</span></div>
+    </div>
+    <aside class="count" aria-label="Contagem regressiva para a aula">
+      <div class="eyebrow">A aula começa em</div>
+      <div class="clock" id="clock"><div><b id="cd-d">--</b><span>dias</span></div><div><b id="cd-h">--</b><span>horas</span></div><div><b id="cd-m">--</b><span>min</span></div><div><b id="cd-s">--</b><span>seg</span></div></div>
+      <p>Data</p><div class="when"><span data-k="dataLonga"></span>, <span data-k="hora"></span></div>
+    </aside>
+  </div>
+</header>
+
+<section class="s"><div class="in">
+  <div class="eyebrow" style="color:var(--leaf-ink)">Conteúdo da aula</div>
+  <h2>Você vai aprender</h2>
+  <p class="sub">Tudo com casos clínicos ilustrativos, no formato de consultório.</p>
+  <div class="learn">
+    <div class="lc"><div class="n">01</div><h3>As 4 quimiovariantes</h3><p>Quando usar cada uma, e por que a tipo II é a porta de entrada do THC.</p></div>
+    <div class="lc"><div class="n">02</div><h3>Mg por gota</h3><p>Por que as mesmas "10 gotas" mudam de um óleo para outro, e como calcular.</p></div>
+    <div class="lc"><div class="n">03</div><h3>O erro do frasco grande</h3><p>A regra do frasco certo e do retorno curto na primeira prescrição.</p></div>
+    <div class="lc"><div class="n">04</div><h3>Anamnese → questionário → protocolo</h3><p>O ciclo de acompanhamento, mostrado ao vivo na plataforma.</p></div>
+  </div>
+</div></section>
+
+<section class="s" style="padding-top:0"><div class="in">
+  <div class="tool">
+    <div>
+      <div class="eyebrow">Teste rápido</div>
+      <h2>As mesmas 10 gotas não são a mesma dose</h2>
+      <p class="sub" style="margin-bottom:12px">Mova o controle e compare dois óleos de concentrações diferentes. Na aula, fazemos esse cálculo juntos na plataforma.</p>
+      <div class="rng"><label for="gotas"><span>Gotas por dia</span><output id="gotasOut">10</output></label><input type="range" id="gotas" min="2" max="40" step="1" value="10"></div>
+      <p class="fine">Exemplo ilustrativo, considerando 20 gotas por mL. O número de gotas por mL varia com o conta-gotas de cada produto: confira no rótulo. Não é orientação de dose.</p>
+    </div>
+    <div>
+      <div class="oils">
+        <div class="oil"><span class="nm">Óleo A</span><span class="sp">3.000 mg em 30 mL</span><span class="mg"><span id="mgA">50</span><small>mg/dia</small></span></div>
+        <div class="oil"><span class="nm">Óleo B</span><span class="sp">20.000 mg em 120 mL</span><span class="mg"><span id="mgB">83</span><small>mg/dia</small></span></div>
+      </div>
+      <div class="diff" id="diff">Com 10 gotas, o óleo B entrega 67% mais canabinoide.</div>
+    </div>
+  </div>
+</div></section>
+
+<section class="s" style="padding-top:0"><div class="in two">
+  <div>
+    <h2>Para quem é</h2>
+    <p class="sub" style="margin-bottom:18px">Aula pensada para a rotina do consultório.</p>
+    <ul class="ck">
+      <li><span>Médicos que já prescrevem cannabis e querem que o paciente continue no acompanhamento.</span></li>
+      <li><span>Médicos que querem começar a prescrever com segurança: titulação, interações e quando não usar THC.</span></li>
+    </ul>
+    <p class="small">Estudantes e outros profissionais de saúde podem assistir. A prescrição é ato médico.</p>
+  </div>
+  <div>
+    <div class="who">
+      <div class="photo" id="foto">AF</div>
+      <div><div class="eyebrow" style="color:var(--leaf-ink)">Quem conduz</div><h3>Dr. André Filipe</h3>
+      <p>Médico de Família e Comunidade · Diretor técnico de clínica no Rio de Janeiro · Professor da prova prática do Revalida · Autor do Guia de Prescrição de Cannabis e de protocolos para 14 condições · Criador da plataforma Cannabiatria.</p></div>
+    </div>
+    <div class="plat" id="plat"><img alt="holy green" src="data:image/jpeg;base64,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"><span>Demonstração ao vivo da plataforma</span></div>
+    <div class="gift"><div class="eyebrow">Presente para quem estiver ao vivo</div><h3>Guia de Prescrição de Cannabis Medicinal</h3><p>Enviado no chat da sala no fim da aula.</p></div>
+  </div>
+</div></section>
+
+<section class="formwrap" id="inscricao"><div class="in">
+  <h2>Garanta sua vaga</h2>
+  <p class="sub">Vagas gratuitas. Preencha para receber o link da transmissão.</p>
+  <div class="fcard" id="fcard">
+    <div class="demo" id="demo" hidden>Pré-visualização: nesta página o formulário não grava inscrições. Ele grava quando a página estiver publicada no seu domínio, conectada ao banco.</div>
+    <form id="form" novalidate>
+      <div class="grid">
+        <div class="f full"><label for="nome">Nome completo</label><input id="nome" name="nome" autocomplete="name" required><span class="e" id="e-nome"></span></div>
+        <div class="f"><label for="whatsapp">WhatsApp</label><input id="whatsapp" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="(00) 00000-0000" required><span class="e" id="e-whatsapp"></span></div>
+        <div class="f"><label for="email">E-mail</label><input id="email" name="email" type="email" autocomplete="email" required><span class="e" id="e-email"></span></div>
+        <div class="f full"><label for="perfil">Você é</label><select id="perfil" name="perfil" required><option value="">Selecione</option><option>Médico(a)</option><option>Estudante de medicina</option><option>Outro profissional de saúde</option></select><span class="e" id="e-perfil"></span></div>
+        <div class="f" id="w-crm" hidden><label for="crm">CRM (opcional)</label><input id="crm" name="crm" inputmode="numeric" maxlength="8"></div>
+        <div class="f" id="w-uf" hidden><label for="crm_uf">UF do CRM (opcional)</label><select id="crm_uf" name="crm_uf"><option value="">Selecione</option></select></div>
+        <div class="f full"><label for="pacientes">Quantos pacientes de cannabis você atende hoje?</label><select id="pacientes" name="pacientes_cannabis" required><option value="">Selecione</option><option>0</option><option>1 a 5</option><option>6 a 20</option><option>mais de 20</option></select><span class="e" id="e-pacientes"></span></div>
+        <div class="f full"><label class="chk"><input type="checkbox" id="c1"><span>Aceito receber avisos sobre esta aula por WhatsApp e e-mail.</span></label><span class="e" id="e-c1"></span>
+          <label class="chk" style="margin-top:6px"><input type="checkbox" id="c2"><span>Quero receber conteúdos e novidades do Dr. André Filipe, incluindo a mentoria.</span></label></div>
+        <div class="hp" aria-hidden="true"><label for="website">Site</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
+      </div>
+      <button class="btn" type="submit" id="send">Garantir minha vaga</button>
+      <p class="micro">Seus dados são usados só para os avisos que você autorizou. Você pode pedir a exclusão a qualquer momento. <button type="button" class="linkpriv" style="background:none;border:0;color:inherit;text-decoration:underline;font:inherit;cursor:pointer;padding:0">Política de privacidade</button></p>
+      <p class="e" id="e-geral" style="color:var(--err);text-align:center"></p>
+    </form>
+  </div>
+</div></section>
+
+<footer><div class="in">
+  <span><b>Dr. André Filipe Pereira de Oliveira Soares</b> · MÉDICO · CRM-<span data-k="uf"></span> <span data-k="crm"></span></span>
+  <span><button type="button" class="linkpriv">Política de privacidade</button> · Conteúdo destinado a profissionais de saúde. · <a href="aluno.html">Área do aluno</a></span>
+</div></footer>
+
+<dialog id="priv"><div class="dc">
+  <h2>Política de privacidade</h2>
+  <p><b>Quem trata os dados:</b> Dr. André Filipe Pereira de Oliveira Soares, CRM-<span data-k="uf"></span> <span data-k="crm"></span>. Contato: <span data-k="emailContato"></span>.</p>
+  <p><b>Quais dados coletamos:</b> nome, WhatsApp, e-mail, perfil profissional, CRM e UF (opcionais), número aproximado de pacientes atendidos com cannabis e origem do acesso (UTM).</p>
+  <p><b>Para que usamos:</b></p>
+  <ol><li>Enviar o link e os lembretes da aula, com o seu consentimento.</li><li>Se você marcar a opção, enviar conteúdos e novidades, incluindo a mentoria. Você pode retirar esse consentimento a qualquer momento.</li><li>Entender o perfil do público para melhorar o conteúdo.</li></ol>
+  <p><b>O que não fazemos:</b> não vendemos nem cedemos seus dados. Não coletamos dados de pacientes.</p>
+  <p><b>Onde ficam:</b> em banco de dados com acesso restrito.</p>
+  <p><b>Grupo de WhatsApp:</b> a entrada é opcional. No grupo, seu número fica visível para os demais participantes. O link da aula também é enviado por e-mail.</p>
+  <p><b>Seus direitos:</b> acessar, corrigir ou excluir seus dados e retirar o consentimento. Escreva para <span data-k="emailContato"></span>.</p>
+  <p><b>Por quanto tempo:</b> até você pedir a exclusão ou até 12 meses após a aula, o que vier primeiro.</p>
+  <p><button class="btn" type="button" id="closePriv" style="background:var(--deep);color:var(--cream)">Fechar</button></p>
+</div></dialog>
+
+<script src="config.js"></script>
+<script>
+/* ===== CONFIGURAÇÃO: textos fixos. Banco e grupo vêm do config.js e do painel admin ===== */
+const CONFIG = {
+  AULA_INICIO: "2026-11-18T20:00:00-03:00",   // data e hora da aula (horário de Brasília)
+  DURACAO_MIN: 90,
+  WHATSAPP_GROUP_URL: "",                      // preenchido pelo painel admin (settings.grupo_whatsapp)
+  SUPABASE_URL: (window.CNP||{}).SUPABASE_URL||"",
+  SUPABASE_ANON_KEY: (window.CNP||{}).SUPABASE_ANON_KEY||"",
+  TABELA: "leads",
+  CRM: "[número]", UF: "[UF]",
+  EMAIL_CONTATO: "[e-mail de contato]",
+  FOTO_URL: ""
+};
+/* ============================================ */
+
+const $=id=>document.getElementById(id);
+/* textos editáveis no painel admin (tabela settings) */
+async function carregaSettings(){
+  if(!CONFIG.SUPABASE_URL) return;
+  try{
+    const r=await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/settings?select=key,value&publico=eq.true`,{headers:{apikey:CONFIG.SUPABASE_ANON_KEY,Authorization:"Bearer "+CONFIG.SUPABASE_ANON_KEY}});
+    if(!r.ok) return; const S={}; (await r.json()).forEach(x=>S[x.key]=x.value);
+    if(S.grupo_whatsapp) CONFIG.WHATSAPP_GROUP_URL=S.grupo_whatsapp;
+    if(S.crm&&S.crm!=="[número]") document.querySelectorAll('[data-k="crm"]').forEach(e=>e.textContent=S.crm);
+    if(S.uf&&S.uf!=="[UF]") document.querySelectorAll('[data-k="uf"]').forEach(e=>e.textContent=S.uf);
+    if(S.email_contato&&!S.email_contato.startsWith("[")) document.querySelectorAll('[data-k="emailContato"]').forEach(e=>e.textContent=S.email_contato);
+  }catch(e){}
+}
+carregaSettings();
+const inicio=new Date(CONFIG.AULA_INICIO);
+const fmt=(o)=>inicio.toLocaleString("pt-BR",{timeZone:"America/Sao_Paulo",...o});
+const textos={
+  dataCurta: fmt({weekday:"short",day:"2-digit",month:"2-digit"}).replace(".",""),
+  dataLonga: fmt({weekday:"long",day:"numeric",month:"long"}),
+  hora: fmt({hour:"2-digit",minute:"2-digit"}).replace(":", "h"),
+  crm: CONFIG.CRM, uf: CONFIG.UF, emailContato: CONFIG.EMAIL_CONTATO
+};
+document.querySelectorAll("[data-k]").forEach(el=>{ el.textContent=textos[el.dataset.k]||""; });
+if(CONFIG.FOTO_URL){ const im=new Image(); im.alt="Dr. André Filipe"; im.src=CONFIG.FOTO_URL; $("foto").textContent=""; $("foto").appendChild(im); }
+
+/* contagem regressiva */
+function tick(){
+  let ms=inicio-new Date(); if(ms<0) ms=0;
+  const d=Math.floor(ms/864e5), h=Math.floor(ms/36e5)%24, m=Math.floor(ms/6e4)%60, s=Math.floor(ms/1e3)%60;
+  $("cd-d").textContent=d; $("cd-h").textContent=String(h).padStart(2,"0"); $("cd-m").textContent=String(m).padStart(2,"0"); $("cd-s").textContent=String(s).padStart(2,"0");
+}
+tick(); setInterval(tick,1000);
+
+/* teste mg por gota */
+const OLEOS={A:3000/30, B:20000/120}; // mg por mL
+function calc(){
+  const g=+$("gotas").value, mlDia=g/20;
+  const a=Math.round(OLEOS.A*mlDia), b=Math.round(OLEOS.B*mlDia);
+  $("gotasOut").textContent=g; $("mgA").textContent=a; $("mgB").textContent=b;
+  $("diff").textContent=`Com ${g} gotas, o óleo B entrega ${Math.round((OLEOS.B/OLEOS.A-1)*100)}% mais canabinoide que o óleo A.`;
+}
+$("gotas").addEventListener("input",calc); calc();
+
+/* UFs e campos de CRM */
+["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"].forEach(u=>{const o=document.createElement("option");o.textContent=u;$("crm_uf").appendChild(o);});
+$("perfil").addEventListener("change",()=>{ const med=$("perfil").value==="Médico(a)"; $("w-crm").hidden=!med; $("w-uf").hidden=!med; });
+$("crm").addEventListener("input",e=>{ e.target.value=e.target.value.replace(/\D/g,""); });
+
+/* máscara WhatsApp */
+$("whatsapp").addEventListener("input",e=>{
+  let v=e.target.value.replace(/\D/g,"").slice(0,11);
+  e.target.value=v.length>6?`(${v.slice(0,2)}) ${v.slice(2,v.length-4)}-${v.slice(-4)}`:v.length>2?`(${v.slice(0,2)}) ${v.slice(2)}`:v;
+});
+
+/* UTMs */
+const qs=new URLSearchParams(location.search);
+const utm={}; ["utm_source","utm_medium","utm_campaign","utm_content"].forEach(k=>utm[k]=qs.get(k)||null);
+
+/* privacidade */
+document.querySelectorAll(".linkpriv").forEach(b=>b.addEventListener("click",()=>$("priv").showModal()));
+$("closePriv").addEventListener("click",()=>$("priv").close());
+
+/* modo de pré-visualização: sem banco configurado */
+const LIVE=!!(CONFIG.SUPABASE_URL&&CONFIG.SUPABASE_ANON_KEY);
+if(!LIVE) $("demo").hidden=false;
+
+function setErr(id,msg){ const w=$(id).closest(".f"); $("e-"+id).textContent=msg||""; if(w) w.classList.toggle("bad",!!msg); }
+function valida(){
+  let ok=true;
+  const nome=$("nome").value.trim(), tel=$("whatsapp").value.replace(/\D/g,""), mail=$("email").value.trim().toLowerCase();
+  setErr("nome", nome.split(/\s+/).length>=2?"":"Digite seu nome completo."); if(nome.split(/\s+/).length<2) ok=false;
+  setErr("whatsapp", tel.length>=10?"":"Confira o número com DDD."); if(tel.length<10) ok=false;
+  const em=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail); setErr("email", em?"":"Confira o e-mail."); if(!em) ok=false;
+  setErr("perfil", $("perfil").value?"":"Escolha uma opção."); if(!$("perfil").value) ok=false;
+  setErr("pacientes", $("pacientes").value?"":"Escolha uma opção."); if(!$("pacientes").value) ok=false;
+  $("e-c1").textContent=$("c1").checked?"":"Precisamos da sua autorização para enviar o link da aula."; if(!$("c1").checked) ok=false;
+  return ok;
+}
+function agendaURL(){
+  const z=d=>d.toISOString().replace(/[-:]|\.\d{3}/g,"");
+  const fim=new Date(inicio.getTime()+CONFIG.DURACAO_MIN*6e4);
+  const p=new URLSearchParams({action:"TEMPLATE",text:"Aula ao vivo: Cannabis medicinal na prática",dates:`${z(inicio)}/${z(fim)}`,details:"Aula gratuita para médicos com Dr. André Filipe. O link da sala chega no grupo e por e-mail.",ctz:"America/Sao_Paulo"});
+  return "https://calendar.google.com/calendar/render?"+p.toString();
+}
+function confirma(nome,repetida){
+  const primeiro=esc(nome.split(/\s+/)[0]||"");
+  $("fcard").innerHTML=`<div class="ok" role="status">
+    <div class="eyebrow" style="color:var(--leaf-ink)">Inscrição recebida</div>
+    <h3>${repetida?"Você já está inscrito(a)!":"Vaga confirmada, "+primeiro+"!"}</h3>
+    <p>O link da transmissão será enviado no grupo da aula. A aula é ${esc(textos.dataLonga)}, ${esc(textos.hora)} (horário de Brasília).</p>
+    ${CONFIG.WHATSAPP_GROUP_URL?`<a class="btn" href="${esc(CONFIG.WHATSAPP_GROUP_URL)}" target="_blank" rel="noopener">Entrar no grupo da aula</a>`:`<span class="btn" aria-disabled="true">Link do grupo em breve</span>`}
+    <a class="btn alt" href="${agendaURL()}" target="_blank" rel="noopener">Adicionar ao Google Agenda</a>
+    <p class="notice">No grupo, só a equipe envia mensagens. Seu número fica visível para os participantes. Se preferir não entrar, você receberá o link também por e-mail.</p>
+    ${LIVE?"":'<p class="notice"><b>Pré-visualização:</b> esta inscrição não foi gravada.</p>'}
+  </div>`;
+  $("fcard").scrollIntoView({behavior:"smooth",block:"center"});
+}
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+$("form").addEventListener("submit",async e=>{
+  e.preventDefault(); $("e-geral").textContent="";
+  if(!valida()){ const f=document.querySelector(".f.bad input,.f.bad select"); f&&f.focus(); return; }
+  const nome=$("nome").value.trim().replace(/\s+/g," ");
+  if($("website").value){ confirma(nome,false); return; } // robô: finge sucesso
+  const med=$("perfil").value==="Médico(a)";
+  const row={nome, whatsapp:"+55"+$("whatsapp").value.replace(/\D/g,""), email:$("email").value.trim().toLowerCase(),
+    perfil:$("perfil").value, crm:med&&$("crm").value?$("crm").value:null, crm_uf:med&&$("crm_uf").value?$("crm_uf").value:null,
+    pacientes_cannabis:$("pacientes").value, consentimento_aula:$("c1").checked, consentimento_marketing:$("c2").checked, ...utm};
+  if(!LIVE){ confirma(nome,false); return; }
+  const btn=$("send"); btn.disabled=true; btn.textContent="Enviando…";
+  try{
+    const r=await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${CONFIG.TABELA}`,{method:"POST",headers:{"apikey":CONFIG.SUPABASE_ANON_KEY,"Authorization":"Bearer "+CONFIG.SUPABASE_ANON_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify(row)});
+    if(r.ok) return confirma(nome,false);
+    if(r.status===409) return confirma(nome,true);
+    throw new Error(r.status);
+  }catch(err){
+    $("e-geral").textContent="Não foi possível enviar agora. Confira sua conexão e tente de novo.";
+    btn.disabled=false; btn.textContent="Garantir minha vaga";
+  }
+});
+</script>
+
+</body>
+</html>

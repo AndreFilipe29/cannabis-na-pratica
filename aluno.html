@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Área do Aluno · Cannabis na Prática</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap">
+<style>
+:root{
+  --deep:#032322; --deep-2:#0b3330; --deep-3:#14403b; --cream:#efddcf; --leaf:#afbf7e; --leaf-ink:#4e6128;
+  --bg:#f7eee6; --card:#fffaf6; --ink:#0f2422; --muted:#5a6762; --line:#e5d7ca; --ok:#3f7d4c; --warn:#b07a12; --err:#b4472c;
+  --f-display:"Quicksand","Nunito","Segoe UI",system-ui,sans-serif;
+  --f-body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#061d1c;--card:#0d2c29;--ink:#efe6dd;--muted:#a7b5af;--line:#1e433f;--leaf-ink:#c4d39a;--ok:#7fcb8f;--warn:#e9b44c;--err:#f0957a;color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;margin:0;letter-spacing:-.01em;text-wrap:balance}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--leaf-ink)}
+:focus-visible{outline:3px solid var(--leaf);outline-offset:2px;border-radius:8px}
+.eyebrow{font:600 11.5px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--leaf-ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:11px 20px;font:700 15px var(--f-display);cursor:pointer;background:var(--deep);color:var(--cream);text-decoration:none}
+.btn.leaf{background:var(--leaf);color:var(--deep)}
+.btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
+.btn.sm{padding:7px 13px;font-size:13px}
+.btn:disabled{opacity:.55;cursor:wait}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--line);color:var(--muted);white-space:nowrap}
+.pill.ok{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+.pill.warn{background:color-mix(in srgb,var(--warn) 20%,transparent);color:var(--warn)}
+.pill.lock{background:transparent;border:1px solid var(--line)}
+input[type=text],input[type=email],input[type=url],input[type=number],input[type=datetime-local],select,textarea{width:100%;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);font-size:15px}
+textarea{min-height:90px;resize:vertical}
+label.l{display:block;font-weight:600;font-size:13px;margin:12px 0 5px}
+/* carregando */
+#boot{min-height:100%;display:grid;place-items:center;color:var(--muted)}
+/* login */
+#login{min-height:100%;display:grid;grid-template-columns:1.1fr 1fr;background:var(--deep);color:var(--cream)}
+#login .art{position:relative;overflow:hidden;padding:48px max(28px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;justify-content:space-between;gap:24px}
+#login .art h1{font-size:clamp(32px,4.4vw,52px);line-height:1.05;margin:16px 0}
+#login .art h1 em{font-style:normal;color:var(--leaf)}
+#login .art p{color:#cdbdaf;max-width:44ch}
+#login .art .logo{width:56px;height:56px}
+#login .art svg.big{position:absolute;right:-80px;bottom:-60px;width:420px;opacity:.08}
+#login .box{background:var(--bg);color:var(--ink);display:grid;place-items:center;padding:32px max(20px,env(safe-area-inset-right,0px)) 32px 20px}
+.lcard{width:min(400px,100%);background:var(--card);border-radius:24px;padding:28px;border:1px solid var(--line)}
+.lcard h2{font-size:24px;margin:6px 0 4px}
+.lcard .btn{width:100%;margin-top:18px}
+.lcard .small{font-size:13px;color:var(--muted);margin-top:14px;text-align:center}
+.msg{font-size:13.5px;border-radius:12px;padding:10px 12px;margin-top:14px}
+.msg.ok{background:color-mix(in srgb,var(--ok) 14%,transparent);color:var(--ok)}
+.msg.err{background:color-mix(in srgb,var(--err) 14%,transparent);color:var(--err)}
+/* app */
+#app{display:grid;grid-template-columns:248px 1fr;min-height:100%}
+nav.side{background:var(--deep);color:var(--cream);padding:22px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:4px;padding-left:max(14px,env(safe-area-inset-left,0px))}
+.brand{display:flex;gap:10px;align-items:center;padding:4px 8px 18px}
+.brand b{font:700 17px var(--f-display);line-height:1.1}
+.brand small{display:block;color:#a7b5af;font-size:11.5px}
+.brand svg{width:30px;height:30px;flex:none}
+nav.side a{display:flex;gap:12px;align-items:center;padding:10px 12px;border-radius:12px;color:#d9cabc;text-decoration:none;font-weight:500}
+nav.side a svg{width:19px;height:19px;flex:none}
+nav.side a[aria-current="page"]{background:var(--deep-3);color:var(--cream)}
+nav.side a:hover{background:var(--deep-2)}
+nav.side .sp{flex:1}
+.me{display:flex;gap:10px;align-items:center;padding:10px;border-top:1px solid var(--deep-3);margin-top:8px}
+.me button{background:none;border:0;color:#a7b5af;font-size:12px;padding:0;cursor:pointer;text-decoration:underline}
+.av{width:34px;height:34px;border-radius:50%;background:var(--leaf);color:var(--deep);display:grid;place-items:center;font:700 13px var(--f-display);flex:none}
+.me small{display:block;color:#a7b5af;font-size:11.5px}
+main{min-width:0;padding:28px max(28px,env(safe-area-inset-right,0px)) 60px 28px}
+.wrap{max-width:1100px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.top h1{font-size:clamp(24px,3vw,32px)}
+.top p{margin:4px 0 0;color:var(--muted)}
+.banner{background:#fdf0d5;color:#5b4310;border-radius:14px;padding:12px 14px;font-size:14px;margin-bottom:18px}
+.hero{background:var(--deep);color:var(--cream);border-radius:26px;padding:26px;display:grid;grid-template-columns:1fr auto;gap:22px;align-items:center}
+.hero h2{font-size:clamp(22px,2.6vw,28px);margin:6px 0}
+.hero p{color:#cdbdaf;margin:0 0 16px}
+.hero .eyebrow{color:var(--leaf)}
+.ring{width:118px;height:118px;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font:700 26px var(--f-display);color:var(--cream)}
+.ring span{position:absolute;bottom:22px;width:100%;text-align:center;font-size:11px;color:#a7b5af}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;min-width:0}
+.card h3{font-size:18px;margin:6px 0 4px}
+.card p{color:var(--muted);margin:0}
+.live{display:flex;gap:16px;align-items:center}
+.date{background:var(--leaf);color:var(--deep);border-radius:16px;padding:10px 14px;text-align:center;flex:none}
+.date b{display:block;font:700 26px var(--f-display);line-height:1}
+.date small{font-weight:600;font-size:12px;text-transform:uppercase}
+.mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin-top:16px}
+.mod{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;cursor:pointer;text-align:left;padding:0;display:flex;flex-direction:column}
+.cover{aspect-ratio:16/8;position:relative;display:flex;align-items:flex-end;padding:14px;color:var(--cream);background:var(--deep);background-size:cover;background-position:center}
+.cover .num{font:700 44px var(--f-display);opacity:.9;line-height:.9}
+.cover svg{position:absolute;right:-18px;top:-14px;width:120px;opacity:.22}
+.mod .mb{padding:14px 16px 16px}
+.mod h3{font-size:16.5px}
+.mod p{font-size:13px;color:var(--muted);margin:4px 0 10px}
+.bar{height:6px;background:var(--line);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--leaf)}
+.module{background:var(--card);border:1px solid var(--line);border-radius:20px;margin-bottom:14px;overflow:hidden}
+.mhead{display:flex;gap:14px;align-items:center;padding:16px 18px;cursor:pointer;width:100%;border:0;background:transparent;text-align:left}
+.mhead .ic{width:46px;height:46px;border-radius:14px;background:var(--deep);color:var(--leaf);display:grid;place-items:center;font:700 18px var(--f-display);flex:none}
+.mhead h3{font-size:17px}
+.mhead small{color:var(--muted)}
+.mhead .grow{flex:1;min-width:0}
+.lessons{border-top:1px solid var(--line)}
+.lesson{display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:center;padding:12px 18px;border:0;border-bottom:1px solid var(--line);cursor:pointer;background:transparent;width:100%;text-align:left}
+.lesson:last-child{border-bottom:0}
+.lesson:hover{background:color-mix(in srgb,var(--leaf) 10%,transparent)}
+.lesson[aria-disabled="true"]{cursor:not-allowed;opacity:.6}
+.dot{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center}
+.dot.done{background:var(--ok);border-color:var(--ok)}
+.dot.done::after{content:"";width:9px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px)}
+.dot.lk::after{content:"🔒";font-size:11px}
+.lesson .t{font-weight:600;font-size:14.5px}
+.lesson small{color:var(--muted)}
+.player{aspect-ratio:16/9;background:var(--deep);border-radius:22px;position:relative;overflow:hidden;display:grid;place-items:center;color:var(--cream);text-align:center;padding:0}
+.player video,.player iframe{width:100%;height:100%;border:0;display:block}
+.player .empty{padding:24px;color:#cdbdaf}
+.lgrid{display:grid;grid-template-columns:1fr 320px;gap:20px;margin-top:18px}
+.lgrid h2{font-size:24px;margin:4px 0 8px}
+.mats{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.mat{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card);font-size:14px}
+.mat .tg{font:700 10.5px var(--f-body);background:var(--deep);color:var(--leaf);padding:3px 6px;border-radius:5px}
+.nav2{display:flex;justify-content:space-between;gap:10px;margin-top:18px;flex-wrap:wrap}
+.weeks{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.wk{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.wk.now{border:2px solid var(--leaf)}
+.wk h3{font-size:17px;margin:8px 0 4px}
+.task{border-top:1px dashed var(--line);margin-top:14px;padding-top:12px}
+.task b{font-family:var(--f-display)}
+.task p{font-size:13.5px;color:var(--muted);margin:4px 0 8px}
+.fb{background:color-mix(in srgb,var(--leaf) 18%,transparent);border-radius:10px;padding:8px 10px;font-size:13.5px;margin-top:8px}
+/* admin */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.tabs button{border:1.5px solid var(--line);background:transparent;border-radius:999px;padding:7px 14px;font-weight:600;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--deep);color:var(--cream);border-color:var(--deep)}
+.tbl{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:18px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+td code{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--muted)}
+td select{padding:6px 8px;font-size:13px;width:auto}
+.kanban{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(230px,1fr);gap:12px;overflow-x:auto;padding-bottom:10px}
+.col{background:color-mix(in srgb,var(--line) 45%,transparent);border-radius:16px;padding:10px;min-height:120px}
+.col h4{margin:2px 4px 10px;font:700 13px var(--f-display);display:flex;justify-content:space-between}
+.col.over{outline:2px dashed var(--leaf)}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px;font-size:13px;cursor:grab}
+.lead b{font-size:14px;display:block}
+.lead small{color:var(--muted);display:block}
+.lead .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.stat b{font:700 26px var(--f-display);display:block}
+.stat small{color:var(--muted)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.tools input{max-width:280px}
+dialog{border:0;border-radius:22px;padding:0;width:min(640px,calc(100% - 24px));background:var(--card);color:var(--ink)}
+dialog::backdrop{background:rgba(3,35,34,.55)}
+dialog form{padding:22px}
+dialog .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+dialog .foot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.chk{display:flex;gap:8px;align-items:center;margin-top:12px;font-weight:600;font-size:14px}
+.hint{font-size:12.5px;color:var(--muted);margin-top:4px}
+.mob{display:none!important}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--deep);color:var(--cream);padding:10px 16px;border-radius:12px;font-size:14px;z-index:40;max-width:calc(100% - 32px)}
+@media (max-width:900px){
+  #login{grid-template-columns:1fr}
+  #login .art{padding:32px 20px}
+  #app{grid-template-columns:1fr}
+  nav.side{position:fixed;bottom:0;top:auto;left:0;right:0;height:auto;flex-direction:row;justify-content:space-around;padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));z-index:20}
+  nav.side .brand,nav.side .sp,nav.side .me{display:none}
+  nav.side a{flex-direction:column;gap:3px;font-size:11px;padding:6px 8px}
+  main{padding:20px max(16px,env(safe-area-inset-right,0px)) 100px max(16px,env(safe-area-inset-left,0px))}
+  .row,.lgrid{grid-template-columns:1fr}
+  .hero{grid-template-columns:1fr}
+  dialog .grid2{grid-template-columns:1fr}
+  .mob{display:inline-flex!important}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="sprout" viewBox="0 0 100 100"><path d="M48 92C30 70 28 40 46 8c14 24 16 52 2 84z" fill="#afbf7e"/><path d="M54 90c4-22 18-38 42-40-6 22-22 36-42 40z" fill="#afbf7e"/></symbol>
+</svg>
+
+<div id="boot">Carregando…</div>
+
+<section id="login" hidden>
+  <div class="art">
+    <svg class="logo" width="56" height="56" aria-hidden="true"><use href="#sprout"/></svg>
+    <div>
+      <div class="eyebrow" style="color:var(--leaf)">Mentoria · Turma fundadora</div>
+      <h1>Cannabis medicinal <em>na prática</em></h1>
+      <p>6 encontros ao vivo, aulas gravadas e tarefas práticas para prescrever com segurança e acompanhar o paciente com método.</p>
+    </div>
+    <p style="font-size:13px">Dr. André Filipe · MÉDICO · CRM-<span class="s-uf">[UF]</span> <span class="s-crm">[número]</span></p>
+    <svg class="big"><use href="#sprout"/></svg>
+  </div>
+  <div class="box">
+    <form class="lcard" id="loginForm">
+      <div class="eyebrow">Área do aluno</div>
+      <h2>Entrar</h2>
+      <p style="color:var(--muted);margin:0;font-size:14px">Digite seu e-mail. Você recebe um link de acesso, sem senha.</p>
+      <label class="l" for="lemail">E-mail</label>
+      <input id="lemail" type="email" autocomplete="email" required placeholder="voce@email.com">
+      <button class="btn" id="lbtn" type="submit">Receber link de acesso</button>
+      <div id="lmsg" role="status"></div>
+      <p class="small">Ainda não é aluno? <a href="index.html">Conheça a aula gratuita</a></p>
+    </form>
+  </div>
+</section>
+
+<div id="app" hidden>
+  <nav class="side" aria-label="Menu">
+    <div class="brand"><svg><use href="#sprout"/></svg><div><b>Cannabis na Prática</b><small>Área do aluno</small></div></div>
+    <a href="#inicio" data-v="inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Início</a>
+    <a href="#trilha" data-v="trilha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Trilha</a>
+    <a href="#encontros" data-v="encontros"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/></svg>Encontros</a>
+    <a href="#materiais" data-v="materiais"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/></svg>Materiais</a>
+    <a href="#admin" data-v="admin" id="navAdmin" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>Admin</a>
+    <div class="sp"></div>
+    <div class="me"><div class="av" id="av">DR</div><div><b style="font-size:13.5px" id="meName"></b><small id="meSub"></small><button id="sair" type="button">Sair</button></div></div>
+  </nav>
+  <main><div class="wrap" id="view"></div></main>
+</div>
+
+<dialog id="dlg"><form method="dialog" id="dlgForm"></form></dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script>
+const C = window.CNP || {};
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const TZ = {timeZone:"America/Sao_Paulo"};
+function toast(t){ const d=document.createElement("div"); d.className="toast"; d.textContent=t; document.body.appendChild(d); setTimeout(()=>d.remove(),3000); }
+
+if(!C.SUPABASE_URL || !window.supabase){
+  $("boot").innerHTML = '<div class="lcard"><h2>Site em configuração</h2><p style="color:var(--muted)">O banco de dados ainda não foi conectado. Volte em breve.</p></div>';
+  throw new Error("config ausente");
+}
+const sb = window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY, {auth:{persistSession:true, detectSessionInUrl:true}});
+
+/* ===== estado ===== */
+const S = { user:null, profile:null, settings:{}, modules:[], lessons:[], progress:new Set(), meetings:[], tasks:[], subs:{}, open:{}, adminTab:"leads" };
+const isAdmin = () => S.profile?.role === "admin";
+const ativo = () => isAdmin() || S.profile?.access === "ativo";
+function semanaAtual(){
+  const ini = new Date(S.settings.cohort_inicio || Date.now());
+  return Math.max(0, Math.floor((Date.now() - ini) / 6048e5) + 1);
+}
+function liberada(l){
+  if(isAdmin()) return true;
+  if(l.aula_aberta) return true;
+  return ativo() && l.release_week <= semanaAtual();
+}
+function motivoBloqueio(l){
+  if(!ativo()) return "Disponível para alunos matriculados";
+  return "Libera na semana " + l.release_week;
+}
+
+/* ===== login ===== */
+$("loginForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const email = $("lemail").value.trim().toLowerCase(), b = $("lbtn");
+  b.disabled = true; b.textContent = "Enviando…";
+  const { error } = await sb.auth.signInWithOtp({ email, options:{ emailRedirectTo: location.origin + location.pathname } });
+  b.disabled = false; b.textContent = "Receber link de acesso";
+  $("lmsg").className = "msg " + (error ? "err" : "ok");
+  $("lmsg").textContent = error
+    ? (/rate|limit|seconds/i.test(error.message) ? "Muitos pedidos seguidos. Espere 1 minuto e tente de novo." : "Não foi possível enviar agora. Confira o e-mail e tente de novo.")
+    : "Pronto! Abra o e-mail que enviamos para " + email + " e clique no link. Confira também o spam.";
+});
+async function sair(){ await sb.auth.signOut(); location.hash=""; location.reload(); }
+$("sair").addEventListener("click", sair);
+
+/* ===== carga ===== */
+async function carregaSettingsPublicas(){
+  const { data } = await sb.from("settings").select("key,value");
+  (data||[]).forEach(x => S.settings[x.key] = x.value);
+  document.querySelectorAll(".s-uf").forEach(e => e.textContent = S.settings.uf || "[UF]");
+  document.querySelectorAll(".s-crm").forEach(e => e.textContent = S.settings.crm || "[número]");
+}
+async function carregaTudo(){
+  const uid = S.user.id;
+  let { data: prof } = await sb.from("profiles").select("*").eq("id", uid).maybeSingle();
+  if(!prof){ await new Promise(r=>setTimeout(r,800)); ({ data: prof } = await sb.from("profiles").select("*").eq("id", uid).maybeSingle()); }
+  S.profile = prof || { role:"aluno", access:"pendente", email:S.user.email };
+  const [st, mo, le, pr, me, ta, su] = await Promise.all([
+    sb.from("settings").select("key,value"),
+    sb.from("modules").select("*").order("ordem"),
+    sb.from("lessons").select("*").order("ordem"),
+    sb.from("progress").select("lesson_id").eq("user_id", uid),
+    sb.from("meetings").select("*").order("numero"),
+    sb.from("tasks").select("*").order("id"),
+    sb.from("task_submissions").select("*").eq("user_id", uid)
+  ]);
+  (st.data||[]).forEach(x => S.settings[x.key] = x.value);
+  S.modules = mo.data||[]; S.lessons = le.data||[];
+  S.progress = new Set((pr.data||[]).map(x=>x.lesson_id));
+  S.meetings = me.data||[]; S.tasks = ta.data||[];
+  S.subs = {}; (su.data||[]).forEach(x => S.subs[x.task_id] = x);
+}
+function aulasOrdenadas(){
+  const ord = {}; S.modules.forEach(m => ord[m.id] = m.ordem);
+  return [...S.lessons].sort((a,b) => (ord[a.module_id]-ord[b.module_id]) || (a.ordem-b.ordem));
+}
+const modDe = l => S.modules.find(m => m.id === l.module_id) || {};
+
+/* ===== telas do aluno ===== */
+const V = $("view");
+function pct(list){ const p=list.filter(liberada); return p.length?Math.round(p.filter(a=>S.progress.has(a.id)).length/p.length*100):0; }
+function cover(m){ return `<div class="cover" style="background-color:${esc(m.cor||"#14403b")}"><svg><use href="#sprout"/></svg><span class="num">${esc(m.numero)}</span></div>`; }
+function bannerAcesso(){
+  if(ativo()) return "";
+  if(S.profile.access === "bloqueado") return `<div class="banner">Seu acesso está suspenso. Fale com a equipe pelo e-mail ${esc(S.settings.email_contato||"")}.</div>`;
+  return `<div class="banner"><b>Seu acesso completo ainda não foi liberado.</b> Você já pode assistir à aula aberta. Assim que a matrícula for confirmada, todas as aulas da sua semana aparecem aqui, sem precisar de novo cadastro.${S.settings.link_matricula?` <a href="${esc(S.settings.link_matricula)}" target="_blank" rel="noopener">Quero me matricular</a>`:""}</div>`;
+}
+function proximoEncontro(){ const now=Date.now(); return S.meetings.find(m => new Date(m.data_hora).getTime() + 2*36e5 > now); }
+function inicio(){
+  const L = aulasOrdenadas(), p = pct(L), nxt = L.find(a => liberada(a) && !S.progress.has(a.id));
+  const enc = proximoEncontro(); const d = enc ? new Date(enc.data_hora) : null;
+  const tarefa = enc ? S.tasks.find(t => t.meeting_id === (S.meetings[S.meetings.indexOf(enc)-1]||{}).id) : null;
+  const nome = (S.profile.nome || "").split(" ")[0];
+  V.innerHTML = `${bannerAcesso()}<div class="top"><div><div class="eyebrow">${ativo()?`Semana ${semanaAtual()}`:"Bem-vindo(a)"}</div><h1>Olá, ${esc(nome||"doutor(a)")}</h1><p>Seu consultório de cannabis, um passo por encontro.</p></div><button class="btn ghost sm mob" data-act="sair">Sair</button></div>
+  <div class="hero"><div><div class="eyebrow">Continue de onde parou</div><h2>${nxt?esc(nxt.titulo):"Tudo em dia por aqui"}</h2><p>${nxt?`Módulo ${esc(modDe(nxt).numero)} · ${esc(modDe(nxt).titulo)}${nxt.duracao_min?` · ${nxt.duracao_min} min`:""}`:"As próximas aulas são liberadas antes de cada encontro."}</p>${nxt?`<a class="btn leaf" href="#aula-${nxt.id}">Assistir agora</a>`:""}</div>
+   <div class="ring" role="img" aria-label="${p}% concluído"><svg viewBox="0 0 120 120" width="118" height="118"><circle cx="60" cy="60" r="50" fill="none" stroke="#14403b" stroke-width="12"/><circle cx="60" cy="60" r="50" fill="none" stroke="#afbf7e" stroke-width="12" stroke-linecap="round" stroke-dasharray="${2*Math.PI*50}" stroke-dashoffset="${2*Math.PI*50*(1-p/100)}"/></svg><b>${p}%</b><span>concluído</span></div></div>
+  <div class="row">
+   ${enc?`<div class="card live"><div class="date"><small>${d.toLocaleDateString("pt-BR",{month:"short",...TZ}).replace(".","")}</small><b>${d.toLocaleDateString("pt-BR",{day:"2-digit",...TZ})}</b></div><div><div class="eyebrow">Próximo encontro ao vivo</div><h3>Encontro ${enc.numero}: ${esc(enc.titulo)}</h3><p>${d.toLocaleDateString("pt-BR",{weekday:"long",...TZ})}, ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit",...TZ})} · 90 min</p></div></div>`:`<div class="card"><div class="eyebrow">Encontros</div><h3>Turma concluída</h3><p>As gravações estão na aba Encontros.</p></div>`}
+   ${tarefa?`<div class="card"><div class="eyebrow">Tarefa até o encontro</div><h3>${esc(tarefa.titulo)}</h3><p>${esc(tarefa.enunciado||"")}</p><a class="btn sm" style="margin-top:10px" href="#encontros">${S.subs[tarefa.id]?"Ver entrega":"Entregar tarefa"}</a></div>`:`<div class="card"><div class="eyebrow">Como funciona</div><h3>Aula gravada + encontro + tarefa</h3><p>Assista às aulas liberadas, traga dúvidas para o encontro e entregue a tarefa até o encontro seguinte.</p></div>`}
+  </div>
+  <h2 style="font-size:20px;margin-top:28px">Módulos</h2>
+  <div class="mods">${S.modules.map(m=>{const l=S.lessons.filter(x=>x.module_id===m.id);const lib=l.some(liberada);return `<button class="mod" data-mod="${m.id}">${cover(m)}<div class="mb"><h3>${esc(m.titulo)}</h3><p>${esc(m.descricao||"")}</p>${lib?`<div class="bar"><i style="width:${pct(l)}%"></i></div>`:`<span class="pill lock">🔒 ${ativo()?`Libera na semana ${m.release_week}`:"Para alunos"}</span>`}</div></button>`;}).join("")}</div>`;
+}
+function trilha(){
+  V.innerHTML = bannerAcesso() + `<div class="top"><div><div class="eyebrow">Conteúdo gravado</div><h1>Trilha</h1><p>As aulas são liberadas antes de cada encontro ao vivo.</p></div></div>` +
+  S.modules.map(m => { const ls = aulasOrdenadas().filter(l=>l.module_id===m.id); if(!ls.length) return "";
+    const isOpen = S.open[m.id] ?? ls.some(liberada); const k = ls.filter(a=>S.progress.has(a.id)).length;
+    return `<div class="module"><button class="mhead" data-tog="${m.id}" aria-expanded="${isOpen}"><span class="ic">${esc(m.numero)}</span><span class="grow"><h3>${esc(m.titulo)}</h3><small>${ls.length} aulas · ${k} concluídas</small></span><span>${isOpen?"−":"+"}</span></button>
+    ${isOpen?`<div class="lessons">${ls.map(a=>{const ok=liberada(a), dn=S.progress.has(a.id);return `<button class="lesson" data-aula="${a.id}" ${ok?"":'aria-disabled="true"'}><span class="dot ${dn?"done":ok?"":"lk"}"></span><span><span class="t">${esc(a.titulo)}</span><br><small>${a.duracao_min?a.duracao_min+" min":""}${a.aula_aberta?" · aula aberta":""}</small></span>${ok?(dn?'<span class="pill ok">Concluída</span>':'<span class="pill">Assistir</span>'):`<span class="pill lock">${esc(motivoBloqueio(a))}</span>`}</button>`;}).join("")}</div>`:""}</div>`; }).join("");
+}
+function embed(url){
+  try{
+    const u = new URL(url);
+    if(/youtu\.be$/.test(u.hostname)) return `https://www.youtube-nocookie.com/embed/${u.pathname.slice(1)}?rel=0`;
+    if(/youtube\.com$/.test(u.hostname)){ const id = u.searchParams.get("v") || u.pathname.split("/").pop(); return `https://www.youtube-nocookie.com/embed/${id}?rel=0`; }
+    if(/vimeo\.com$/.test(u.hostname) && !u.hostname.startsWith("player")) return `https://player.vimeo.com/video/${u.pathname.split("/").filter(Boolean)[0]}`;
+    if(/\.(mp4|webm|m3u8)(\?|$)/i.test(u.pathname)) return null;
+    return url;
+  }catch(e){ return url; }
+}
+async function aula(id){
+  const L = aulasOrdenadas(), i = L.findIndex(a=>a.id==id), a = L[i];
+  if(!a){ location.hash="trilha"; return; }
+  if(!liberada(a)){ toast(motivoBloqueio(a)); location.hash="trilha"; return; }
+  const m = modDe(a), dn = S.progress.has(a.id);
+  const prev = L.slice(0,i).reverse().find(liberada), next = L.slice(i+1).find(liberada);
+  V.innerHTML = `<p style="margin-top:0"><a href="#trilha" style="color:var(--muted)">← Trilha</a></p>
+  <div class="player" id="player"><div class="empty">Carregando vídeo…</div></div>
+  <div class="lgrid"><div><div class="eyebrow">Módulo ${esc(m.numero)} · ${esc(m.titulo)}</div><h2>${esc(a.titulo)}</h2>
+   <p style="color:var(--muted)">${esc(a.descricao || "Ao final, aplique no seu próximo atendimento e traga a dúvida para o encontro.")}</p>
+   <button class="btn ${dn?"ghost":""}" data-done="${a.id}">${dn?"Concluída ✓ (desmarcar)":"Marcar como concluída"}</button>
+   <div class="nav2">${prev?`<a class="btn ghost sm" href="#aula-${prev.id}">← ${esc(prev.titulo)}</a>`:"<span></span>"}${next?`<a class="btn ghost sm" href="#aula-${next.id}">${esc(next.titulo)} →</a>`:""}</div></div>
+   <aside><div class="card"><div class="eyebrow">Materiais da aula</div><div class="mats" id="amats"><span style="color:var(--muted);font-size:13.5px">Carregando…</span></div></div>
+   <div class="card" style="margin-top:12px"><div class="eyebrow">Dúvida para o encontro</div><textarea id="duvida" maxlength="4000" placeholder="Escreva sua dúvida. Ela entra na pauta do próximo encontro."></textarea><button class="btn sm" style="margin-top:8px" data-act="duvida" data-l="${a.id}">Enviar dúvida</button></div></aside></div>`;
+  const [{ data: med }, { data: mats }] = await Promise.all([
+    sb.from("lesson_media").select("*").eq("lesson_id", a.id).maybeSingle(),
+    sb.from("materials").select("*").eq("lesson_id", a.id).order("id")
+  ]);
+  const P = $("player"); if(!P) return;
+  if(med?.video_path){
+    const { data: su } = await sb.storage.from("videos").createSignedUrl(med.video_path, 3*3600);
+    P.innerHTML = su ? `<video src="${esc(su.signedUrl)}" controls playsinline controlsList="nodownload"></video>` : `<div class="empty">Não foi possível carregar o vídeo.</div>`;
+  } else if(med?.video_url){
+    const e = embed(med.video_url);
+    P.innerHTML = e ? `<iframe src="${esc(e)}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen title="${esc(a.titulo)}"></iframe>` : `<video src="${esc(med.video_url)}" controls playsinline></video>`;
+  } else P.innerHTML = `<div class="empty"><svg width="70" height="70"><use href="#sprout"/></svg><p>O vídeo desta aula será publicado em breve.</p></div>`;
+  const M = $("amats"); if(M) M.innerHTML = (mats&&mats.length) ? mats.map(matHTML).join("") : `<span style="color:var(--muted);font-size:13.5px">Sem materiais nesta aula.</span>`;
+}
+const matHTML = x => `<div class="mat"><span class="tg">${esc(x.tipo||"PDF")}</span><span style="flex:1;min-width:0">${esc(x.titulo)}</span><button class="btn ghost sm" data-baixar="${esc(x.file_path)}">Baixar</button></div>`;
+function encontros(){
+  const now = Date.now(), enc = proximoEncontro();
+  V.innerHTML = bannerAcesso() + `<div class="top"><div><div class="eyebrow">Quartas, 20h (Brasília) · a cada 15 dias</div><h1>Encontros ao vivo</h1><p>90 minutos com prática, casos e hotseat. Entre um encontro e outro, uma tarefa.</p></div></div>
+  <div class="weeks">${S.meetings.map(m=>{ const d=new Date(m.data_hora), past=d.getTime()+2*36e5<now, now_=enc&&enc.id===m.id;
+    const st = past?"Realizado":now_?"Próximo":"Agendado";
+    const ts = S.tasks.filter(t=>t.meeting_id===m.id);
+    return `<div class="wk ${now_?"now":""}"><span class="pill ${now_?"ok":past?"":"lock"}">${st}</span>
+    <h3>${m.numero}. ${esc(m.titulo)}</h3><p style="color:var(--muted);margin:0;font-size:13.5px">${d.toLocaleDateString("pt-BR",{weekday:"short",day:"2-digit",month:"2-digit",...TZ})} · ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit",...TZ})}</p>
+    <p style="font-size:14px;margin:8px 0 0">${esc(m.descricao||"")}</p>
+    ${now_&&ativo()&&S.settings.zoom_url?`<a class="btn leaf sm" style="margin-top:10px" href="${esc(S.settings.zoom_url)}" target="_blank" rel="noopener">Entrar na sala</a>`:""}
+    ${m.gravacao_url&&ativo()?`<a class="btn ghost sm" style="margin-top:10px" href="${esc(m.gravacao_url)}" target="_blank" rel="noopener">Ver gravação</a>`:""}
+    ${ts.map(t=>{const s=S.subs[t.id];return `<div class="task"><span class="eyebrow">Tarefa${t.prazo?` · até ${new Date(t.prazo+"T12:00").toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"})}`:""}</span><br><b>${esc(t.titulo)}</b><p>${esc(t.enunciado||"")}</p>
+      ${ativo()?`<textarea id="tx-${t.id}" placeholder="Sua entrega (texto)">${esc(s?.texto||"")}</textarea><input type="url" id="lk-${t.id}" placeholder="Link (Drive, PDF, foto…)" value="${esc(s?.link||"")}" style="margin-top:6px"><button class="btn sm" style="margin-top:8px" data-entrega="${t.id}">${s?"Atualizar entrega":"Entregar"}</button>${s?.feedback?`<div class="fb"><b>Retorno do André:</b> ${esc(s.feedback)}</div>`:""}`:`<span class="pill lock">🔒 Para alunos</span>`}</div>`;}).join("")}
+    </div>`;}).join("")}</div>`;
+}
+async function materiais(){
+  V.innerHTML = bannerAcesso() + `<div class="top"><div><div class="eyebrow">Para baixar</div><h1>Materiais</h1><p>Protocolos, modelos e checklists para usar no consultório.</p></div></div><div class="mats" id="allmats"><span style="color:var(--muted)">Carregando…</span></div>`;
+  const { data } = await sb.from("materials").select("*").order("created_at",{ascending:false});
+  const el = $("allmats"); if(!el) return;
+  if(!data || !data.length){ el.innerHTML = `<div class="card"><p>${ativo()?"Nenhum material publicado ainda.":"Os materiais ficam disponíveis após a matrícula."}</p></div>`; return; }
+  const tit = id => (S.lessons.find(l=>l.id===id)||{}).titulo;
+  el.innerHTML = data.map(x => matHTML({...x, titulo: x.titulo + (x.lesson_id&&tit(x.lesson_id)?` · ${tit(x.lesson_id)}`:"")})).join("");
+}
+
+/* ===== ADMIN ===== */
+const STAGES = [["inscrito","Inscritos"],["contatado","Contatados"],["assistiu_aula","Assistiu à aula"],["aplicou","Aplicou"],["aprovado","Aprovado"],["link_enviado","Link enviado"],["pago","Pago"],["aluno_ativo","Aluno ativo"],["perdido","Perdido"]];
+const ADM = { leads:[], profiles:[], q:"" };
+function admin(){
+  if(!isAdmin()){ location.hash="inicio"; return; }
+  const tabs = [["leads","Leads"],["alunos","Alunos e acessos"],["aulas","Aulas e vídeos"],["encontros","Encontros e tarefas"],["entregas","Dúvidas e entregas"],["config","Configurações"]];
+  V.innerHTML = `<div class="top"><div><div class="eyebrow">Só para a equipe</div><h1>Admin</h1><p>Leads, acessos, aulas, vídeos, PDFs e encontros.</p></div></div>
+  <div class="tabs">${tabs.map(t=>`<button data-tab="${t[0]}" aria-pressed="${S.adminTab===t[0]}">${t[1]}</button>`).join("")}</div><div id="adm">Carregando…</div>`;
+  ({leads:admLeads, alunos:admAlunos, aulas:admAulas, encontros:admEncontros, entregas:admEntregas, config:admConfig})[S.adminTab]();
+}
+const A = () => $("adm");
+async function admLeads(){
+  const { data, error } = await sb.from("leads").select("*").order("created_at",{ascending:false});
+  if(error){ A().textContent = "Erro ao carregar leads."; return; }
+  ADM.leads = data;
+  const { data: profs } = await sb.from("profiles").select("email,access"); ADM.profiles = profs||[];
+  drawLeads();
+}
+function drawLeads(){
+  const q = ADM.q.toLowerCase();
+  const L = ADM.leads.filter(l => !q || (l.nome+l.email+l.whatsapp).toLowerCase().includes(q));
+  const c = k => ADM.leads.filter(l=>l.stage===k).length;
+  const hoje = ADM.leads.filter(l => new Date(l.created_at).toDateString() === new Date().toDateString()).length;
+  const ativoEmail = e => ADM.profiles.some(p=>p.email===e && p.access==="ativo");
+  A().innerHTML = `<div class="stats"><div class="stat"><b>${ADM.leads.length}</b><small>inscritos no total</small></div><div class="stat"><b>${hoje}</b><small>hoje</small></div><div class="stat"><b>${ADM.leads.filter(l=>l.perfil==="Médico(a)").length}</b><small>médicos</small></div><div class="stat"><b>${c("pago")+c("aluno_ativo")}</b><small>matrículas</small></div></div>
+  <div class="tools"><input type="text" id="lq" placeholder="Buscar nome, e-mail ou WhatsApp" value="${esc(ADM.q)}"><button class="btn ghost sm" data-act="csv">Baixar planilha (CSV)</button><button class="btn ghost sm" data-act="reload">Atualizar</button></div>
+  <div class="kanban">${STAGES.map(([k,t])=>`<div class="col" data-col="${k}"><h4>${t}<span>${L.filter(l=>l.stage===k).length}</span></h4>${L.filter(l=>l.stage===k).map(l=>`<div class="lead" draggable="true" data-lead="${l.id}"><b>${esc(l.nome)}</b><small>${esc(l.perfil)}${l.crm?` · CRM ${esc(l.crm)}-${esc(l.crm_uf||"")}`:""}</small><small>${esc(l.email)}</small><small>${esc(l.pacientes_cannabis||"")} · ${new Date(l.created_at).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"})}${l.utm_source?` · ${esc(l.utm_source)}`:""}</small>
+    <div class="acts"><a class="btn ghost sm" href="https://wa.me/${esc(l.whatsapp.replace(/\D/g,""))}" target="_blank" rel="noopener">WhatsApp</a><select data-stage="${l.id}" aria-label="Etapa">${STAGES.map(s=>`<option value="${s[0]}" ${s[0]===l.stage?"selected":""}>${s[1]}</option>`).join("")}</select>${ativoEmail(l.email)?'<span class="pill ok">Acesso ativo</span>':`<button class="btn sm" data-liberar="${esc(l.email)}" data-leadid="${l.id}">Liberar acesso</button>`}</div></div>`).join("")}</div>`).join("")}</div>`;
+  $("lq").addEventListener("input", e => { ADM.q = e.target.value; const p=e.target.selectionStart; drawLeads(); const n=$("lq"); n.focus(); n.setSelectionRange(p,p); });
+}
+async function mudaEtapa(id, stage){
+  const { error } = await sb.from("leads").update({ stage }).eq("id", id);
+  if(error){ toast("Não foi possível mudar a etapa."); return; }
+  const l = ADM.leads.find(x=>x.id===id); if(l) l.stage = stage; drawLeads();
+}
+async function liberarAcesso(email, leadId){
+  email = email.trim().toLowerCase(); if(!email) return;
+  const r1 = await sb.from("acessos_liberados").upsert({ email });
+  const r2 = await sb.from("profiles").update({ access:"ativo" }).eq("email", email);
+  if(r1.error || r2.error){ toast("Erro ao liberar acesso."); return; }
+  if(leadId) await sb.from("leads").update({ stage:"aluno_ativo" }).eq("id", leadId);
+  toast("Acesso liberado para " + email + ". A pessoa entra com esse e-mail.");
+  admin();
+}
+async function admAlunos(){
+  const [{ data: profs }, { data: lib }] = await Promise.all([sb.from("profiles").select("*").order("created_at",{ascending:false}), sb.from("acessos_liberados").select("*")]);
+  const semLogin = (lib||[]).filter(x => !(profs||[]).some(p=>p.email===x.email));
+  A().innerHTML = `<div class="card" style="margin-bottom:16px"><div class="eyebrow">Liberar acesso por e-mail</div><p>Use depois da confirmação do pagamento. Se a pessoa ainda não entrou, o acesso fica pronto para o primeiro login.</p>
+   <div class="tools" style="margin:10px 0 0"><input type="email" id="libEmail" placeholder="email@aluno.com"><button class="btn sm" data-act="libEmail">Liberar</button></div></div>
+  <div class="tbl"><table><thead><tr><th>E-mail</th><th>Nome</th><th>Acesso</th><th>Papel</th><th>Desde</th></tr></thead><tbody>
+  ${(profs||[]).map(p=>`<tr><td>${esc(p.email)}</td><td>${esc(p.nome||"")}</td><td><select data-access="${p.id}">${["pendente","ativo","bloqueado"].map(a=>`<option ${a===p.access?"selected":""}>${a}</option>`).join("")}</select></td><td>${esc(p.role)}</td><td>${new Date(p.created_at).toLocaleDateString("pt-BR")}</td></tr>`).join("")}
+  ${semLogin.map(x=>`<tr><td>${esc(x.email)}</td><td colspan="2"><span class="pill warn">Liberado, ainda não entrou</span></td><td>aluno</td><td>${new Date(x.created_at).toLocaleDateString("pt-BR")}</td></tr>`).join("")}
+  </tbody></table></div>`;
+}
+async function admAulas(){
+  const [{ data: les }, { data: med }, { data: mats }] = await Promise.all([sb.from("lessons").select("*").order("ordem"), sb.from("lesson_media").select("*"), sb.from("materials").select("id,lesson_id")]);
+  S.lessons = les||[]; const L = aulasOrdenadas();
+  const temVideo = id => (med||[]).some(m=>m.lesson_id===id && (m.video_url||m.video_path));
+  const nMat = id => (mats||[]).filter(m=>m.lesson_id===id).length;
+  A().innerHTML = `<div class="tools"><button class="btn leaf sm" data-act="novaAula">+ Nova aula</button><button class="btn ghost sm" data-act="matGeral">+ Material geral (sem aula)</button><span class="hint">Vídeos: prefira link do YouTube (não listado), Vimeo ou Panda. Upload direto aceita até 50 MB no plano grátis.</span></div>
+  <div class="tbl"><table><thead><tr><th>Mapa</th><th>Aula</th><th>Mód.</th><th>Semana</th><th>Vídeo</th><th>PDFs</th><th>Status</th><th></th></tr></thead><tbody>
+  ${L.map(a=>`<tr><td><code>${esc(a.codigo_mapa||"")}</code></td><td>${esc(a.titulo)}${a.aula_aberta?' <span class="pill ok">aberta</span>':""}</td><td>${esc(modDe(a).numero)}</td><td>${a.release_week}</td><td>${temVideo(a.id)?'<span class="pill ok">OK</span>':'<span class="pill">Falta</span>'}</td><td>${nMat(a.id)}</td><td>${a.status==="publicada"?'<span class="pill ok">Publicada</span>':'<span class="pill warn">Rascunho</span>'}</td><td><button class="btn ghost sm" data-edit="${a.id}">Editar</button></td></tr>`).join("")}
+  </tbody></table></div>`;
+}
+async function editarAula(id){
+  const a = id ? S.lessons.find(l=>l.id==id) : { titulo:"", module_id:S.modules[0]?.id, ordem:99, release_week:1, status:"rascunho", aula_aberta:false };
+  let med = null, mats = [];
+  if(id){ ({ data: med } = await sb.from("lesson_media").select("*").eq("lesson_id", id).maybeSingle()); ({ data: mats } = await sb.from("materials").select("*").eq("lesson_id", id)); }
+  $("dlgForm").innerHTML = `<div class="eyebrow">${id?"Editar aula "+esc(a.codigo_mapa||""):"Nova aula"}</div><h2 style="font-size:22px;margin:4px 0 6px">${esc(a.titulo||"Nova aula")}</h2>
+  <label class="l">Título</label><input type="text" name="titulo" required value="${esc(a.titulo)}">
+  <div class="grid2"><div><label class="l">Módulo</label><select name="module_id">${S.modules.map(m=>`<option value="${m.id}" ${m.id===a.module_id?"selected":""}>${esc(m.numero)} · ${esc(m.titulo)}</option>`).join("")}</select></div>
+  <div><label class="l">Código no mapa</label><input type="text" name="codigo_mapa" value="${esc(a.codigo_mapa||"")}"></div>
+  <div><label class="l">Libera na semana</label><input type="number" name="release_week" min="0" max="20" value="${a.release_week}"></div>
+  <div><label class="l">Ordem no módulo</label><input type="number" name="ordem" value="${a.ordem}"></div>
+  <div><label class="l">Duração (min)</label><input type="number" name="duracao_min" value="${a.duracao_min||""}"></div>
+  <div><label class="l">Status</label><select name="status"><option value="rascunho" ${a.status==="rascunho"?"selected":""}>Rascunho</option><option value="publicada" ${a.status==="publicada"?"selected":""}>Publicada</option></select></div></div>
+  <label class="chk"><input type="checkbox" name="aula_aberta" ${a.aula_aberta?"checked":""}> Aula aberta (visitantes sem matrícula assistem)</label>
+  <label class="l">Descrição</label><textarea name="descricao">${esc(a.descricao||"")}</textarea>
+  <label class="l">Link do vídeo (YouTube não listado, Vimeo, Panda…)</label><input type="url" name="video_url" value="${esc(med?.video_url||"")}" placeholder="https://youtu.be/...">
+  <label class="l">ou enviar arquivo de vídeo (até 50 MB)</label><input type="file" name="video_file" accept="video/*">${med?.video_path?`<p class="hint">Arquivo atual: ${esc(med.video_path.split("/").pop())}</p>`:""}
+  <label class="l">PDFs e materiais da aula</label>${(mats||[]).map(m=>`<div class="mat" style="margin-bottom:6px"><span class="tg">${esc(m.tipo)}</span><span style="flex:1">${esc(m.titulo)}</span><button type="button" class="btn ghost sm" data-delmat="${m.id}" data-path="${esc(m.file_path)}">Remover</button></div>`).join("")}
+  <input type="file" name="mat_files" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg">
+  <p class="hint" id="dlgStatus"></p>
+  <div class="foot"><button type="button" class="btn ghost" data-act="fechar">Cancelar</button><button type="submit" class="btn" value="ok">Salvar</button></div>`;
+  $("dlgForm").onsubmit = async e => { e.preventDefault(); await salvarAula(id, new FormData($("dlgForm"))); };
+  $("dlg").showModal();
+}
+async function upload(bucket, file, prefix){
+  const path = `${prefix}/${Date.now()}-${file.name.normalize("NFD").replace(/[^\w.\-]+/g,"_")}`;
+  const { error } = await sb.storage.from(bucket).upload(path, file, { upsert:false, contentType:file.type||undefined });
+  if(error) throw new Error(error.message);
+  return path;
+}
+async function salvarAula(id, f){
+  const st = $("dlgStatus"), b = $("dlgForm").querySelector("[type=submit]"); b.disabled = true; st.textContent = "Salvando…";
+  try{
+    const row = { titulo:f.get("titulo").trim(), module_id:+f.get("module_id"), codigo_mapa:f.get("codigo_mapa")||null, release_week:+f.get("release_week")||0, ordem:+f.get("ordem")||0, duracao_min:+f.get("duracao_min")||null, status:f.get("status"), aula_aberta:!!f.get("aula_aberta"), descricao:f.get("descricao")||null };
+    let lid = id;
+    if(id){ const { error } = await sb.from("lessons").update(row).eq("id", id); if(error) throw error; }
+    else { const { data, error } = await sb.from("lessons").insert(row).select("id").single(); if(error) throw error; lid = data.id; }
+    const vf = f.get("video_file"); let video_path;
+    if(vf && vf.size){ if(vf.size > 50*1024*1024) throw new Error("Vídeo acima de 50 MB. Use um link do YouTube não listado ou Vimeo."); st.textContent = "Enviando vídeo…"; video_path = await upload("videos", vf, "aula-"+lid); }
+    const media = { lesson_id:lid, video_url:f.get("video_url")||null }; if(video_path) media.video_path = video_path; else if(media.video_url) media.video_path = null;
+    if(media.video_url || video_path || id){ const { error } = await sb.from("lesson_media").upsert(media); if(error) throw error; }
+    for(const mf of f.getAll("mat_files")){ if(!mf || !mf.size) continue; st.textContent = "Enviando " + mf.name + "…";
+      const p = await upload("materiais", mf, "aula-"+lid); const ext = (mf.name.split(".").pop()||"PDF").toUpperCase();
+      const { error } = await sb.from("materials").insert({ lesson_id:lid, titulo:mf.name.replace(/\.[^.]+$/,""), tipo:ext, file_path:p }); if(error) throw error; }
+    $("dlg").close(); toast("Aula salva."); admAulas();
+  }catch(err){ st.textContent = "Erro: " + (err.message||err); b.disabled = false; }
+}
+function materialGeral(){
+  $("dlgForm").innerHTML = `<div class="eyebrow">Material geral</div><h2 style="font-size:22px;margin:4px 0 6px">Enviar PDFs para a aba Materiais</h2><p class="hint">Fica visível para alunos com acesso ativo.</p>
+  <input type="file" name="mat_files" multiple required accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg" style="margin-top:12px"><p class="hint" id="dlgStatus"></p>
+  <div class="foot"><button type="button" class="btn ghost" data-act="fechar">Cancelar</button><button type="submit" class="btn">Enviar</button></div>`;
+  $("dlgForm").onsubmit = async e => { e.preventDefault(); const st=$("dlgStatus");
+    try{ for(const mf of new FormData($("dlgForm")).getAll("mat_files")){ if(!mf.size) continue; st.textContent="Enviando "+mf.name+"…"; const p=await upload("materiais", mf, "geral");
+      const { error } = await sb.from("materials").insert({ lesson_id:null, titulo:mf.name.replace(/\.[^.]+$/,""), tipo:(mf.name.split(".").pop()||"PDF").toUpperCase(), file_path:p }); if(error) throw error; }
+      $("dlg").close(); toast("Materiais enviados."); }catch(err){ st.textContent="Erro: "+(err.message||err); } };
+  $("dlg").showModal();
+}
+async function admEncontros(){
+  const [{ data: me }, { data: ta }] = await Promise.all([sb.from("meetings").select("*").order("numero"), sb.from("tasks").select("*").order("id")]);
+  S.meetings = me||[]; S.tasks = ta||[];
+  const local = iso => { const d=new Date(iso); const p=n=>String(n).padStart(2,"0"); const b=new Date(d.toLocaleString("en-US",TZ)); return `${b.getFullYear()}-${p(b.getMonth()+1)}-${p(b.getDate())}T${p(b.getHours())}:${p(b.getMinutes())}`; };
+  A().innerHTML = `<p class="hint" style="margin-top:0">Horários em Brasília. Salve cada encontro depois de editar.</p><div class="weeks">${S.meetings.map(m=>{const t=S.tasks.find(x=>x.meeting_id===m.id)||{};return `<form class="wk" data-meet="${m.id}" data-task="${t.id||""}">
+   <div class="eyebrow">Encontro ${m.numero}</div>
+   <label class="l">Título</label><input type="text" name="titulo" value="${esc(m.titulo)}">
+   <label class="l">Data e hora</label><input type="datetime-local" name="data_hora" value="${local(m.data_hora)}">
+   <label class="l">Descrição</label><textarea name="descricao" style="min-height:60px">${esc(m.descricao||"")}</textarea>
+   <label class="l">Link da gravação</label><input type="url" name="gravacao_url" value="${esc(m.gravacao_url||"")}">
+   <label class="l">Tarefa ${esc(t.codigo_mapa||"")}</label><input type="text" name="t_titulo" value="${esc(t.titulo||"")}">
+   <textarea name="t_enunciado" style="min-height:60px;margin-top:6px">${esc(t.enunciado||"")}</textarea>
+   <label class="l">Prazo da tarefa</label><input type="text" name="t_prazo" placeholder="AAAA-MM-DD" value="${esc(t.prazo||"")}">
+   <button class="btn sm" style="margin-top:12px" type="submit">Salvar encontro</button></form>`;}).join("")}</div>`;
+}
+async function salvaEncontro(form){
+  const f = new FormData(form), mid = +form.dataset.meet, tid = form.dataset.task;
+  const dh = f.get("data_hora") ? new Date(f.get("data_hora") + ":00-03:00").toISOString() : null;
+  const r1 = await sb.from("meetings").update({ titulo:f.get("titulo"), data_hora:dh, descricao:f.get("descricao")||null, gravacao_url:f.get("gravacao_url")||null }).eq("id", mid);
+  const trow = { titulo:f.get("t_titulo"), enunciado:f.get("t_enunciado")||null, prazo:f.get("t_prazo")||null, meeting_id:mid };
+  const r2 = tid ? await sb.from("tasks").update(trow).eq("id", +tid) : (trow.titulo ? await sb.from("tasks").insert(trow) : {});
+  toast(r1.error || r2.error ? "Erro ao salvar." : "Encontro salvo.");
+}
+async function admEntregas(){
+  const [{ data: qs }, { data: su }, { data: profs }] = await Promise.all([
+    sb.from("questions").select("*").order("created_at",{ascending:false}),
+    sb.from("task_submissions").select("*").order("created_at",{ascending:false}),
+    sb.from("profiles").select("id,email,nome")]);
+  const who = id => { const p=(profs||[]).find(x=>x.id===id); return p?(p.nome||p.email):"—"; };
+  const tit = id => (S.lessons.find(l=>l.id===id)||{}).titulo || "Geral";
+  const tt = id => (S.tasks.find(t=>t.id===id)||{}).titulo || "Tarefa";
+  A().innerHTML = `<h2 style="font-size:19px;margin-bottom:10px">Dúvidas para os encontros</h2>
+  <div class="tbl" style="margin-bottom:24px"><table><thead><tr><th>Aluno</th><th>Aula</th><th>Dúvida</th><th>Data</th><th></th></tr></thead><tbody>
+  ${(qs||[]).map(q=>`<tr><td>${esc(who(q.user_id))}</td><td>${esc(tit(q.lesson_id))}</td><td style="min-width:240px">${esc(q.texto)}</td><td>${new Date(q.created_at).toLocaleDateString("pt-BR")}</td><td>${q.respondida?'<span class="pill ok">Respondida</span>':`<button class="btn ghost sm" data-resp="${q.id}">Marcar respondida</button>`}</td></tr>`).join("")||'<tr><td colspan="5">Nenhuma dúvida ainda.</td></tr>'}
+  </tbody></table></div>
+  <h2 style="font-size:19px;margin-bottom:10px">Entregas de tarefas</h2>
+  <div class="tbl"><table><thead><tr><th>Aluno</th><th>Tarefa</th><th>Entrega</th><th>Retorno</th></tr></thead><tbody>
+  ${(su||[]).map(s=>`<tr><td>${esc(who(s.user_id))}</td><td>${esc(tt(s.task_id))}</td><td style="min-width:220px">${esc(s.texto||"")}${s.link?`<br><a href="${esc(s.link)}" target="_blank" rel="noopener">abrir link</a>`:""}</td><td style="min-width:220px"><textarea id="fb-${s.id}" style="min-height:60px">${esc(s.feedback||"")}</textarea><button class="btn sm" style="margin-top:6px" data-fb="${s.id}">Salvar retorno</button></td></tr>`).join("")||'<tr><td colspan="4">Nenhuma entrega ainda.</td></tr>'}
+  </tbody></table></div>`;
+}
+async function admConfig(){
+  const { data } = await sb.from("settings").select("*").order("key");
+  const nomes = { cohort_inicio:"Início da turma (semana 1)", aula_inicio:"Aula aberta (captação)", grupo_whatsapp:"Link do grupo de WhatsApp da aula", link_matricula:"Link de matrícula / pagamento", crm:"Número do CRM", uf:"UF do CRM", email_contato:"E-mail de contato", foto_url:"URL da sua foto", zoom_url:"Link da sala dos encontros (só alunos)" };
+  A().innerHTML = `<form class="card" id="cfgForm">${(data||[]).map(s=>`<label class="l">${esc(nomes[s.key]||s.key)}</label><input type="text" name="${esc(s.key)}" value="${esc(s.value||"")}">`).join("")}<button class="btn" style="margin-top:16px" type="submit">Salvar configurações</button><p class="hint">Datas no formato 2026-11-25T20:00:00-03:00.</p></form>`;
+  $("cfgForm").onsubmit = async e => { e.preventDefault(); const f = new FormData(e.target);
+    const rows = [...f.entries()].map(([key,value]) => ({ key, value, publico: key !== "zoom_url" }));
+    const { error } = await sb.from("settings").upsert(rows); toast(error ? "Erro ao salvar." : "Configurações salvas."); if(!error) rows.forEach(r=>S.settings[r.key]=r.value); };
+}
+function csv(){
+  const cols = ["created_at","nome","whatsapp","email","perfil","crm","crm_uf","pacientes_cannabis","stage","consentimento_marketing","utm_source","utm_medium","utm_campaign","utm_content"];
+  const q = v => `"${String(v ?? "").replace(/"/g,'""')}"`;
+  const txt = "﻿" + cols.join(";") + "\n" + ADM.leads.map(l => cols.map(c=>q(l[c])).join(";")).join("\n");
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([txt],{type:"text/csv"})); a.download = "leads-cannabis-na-pratica.csv"; a.click();
+}
+
+/* ===== roteador e eventos ===== */
+const VIEWS = { inicio, trilha, encontros, materiais, admin };
+function render(){
+  const h = location.hash.slice(1) || "inicio"; let v = h, arg = null;
+  if(h.startsWith("aula-")){ v = "aula"; arg = h.slice(5); }
+  document.querySelectorAll("nav.side a").forEach(a => a.setAttribute("aria-current", a.dataset.v === (v==="aula"?"trilha":v) ? "page" : "false"));
+  if(v === "aula") aula(arg); else (VIEWS[v] || inicio)();
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange", () => { if(!$("app").hidden) render(); });
+document.addEventListener("click", async e => {
+  const t = e.target.closest("[data-aula],[data-mod],[data-tog],[data-done],[data-act],[data-baixar],[data-entrega],[data-tab],[data-liberar],[data-edit],[data-delmat],[data-resp],[data-fb]"); if(!t) return;
+  const d = t.dataset;
+  if(d.aula){ if(t.getAttribute("aria-disabled")==="true"){ toast(motivoBloqueio(S.lessons.find(l=>l.id==d.aula))); return; } location.hash = "aula-"+d.aula; }
+  else if(d.mod){ S.open = {}; S.open[d.mod] = true; location.hash = "trilha"; }
+  else if(d.tog){ const ls=S.lessons.filter(l=>l.module_id==d.tog); S.open[d.tog] = !(S.open[d.tog] ?? ls.some(liberada)); trilha(); }
+  else if(d.done){ const id=+d.done;
+    if(S.progress.has(id)){ await sb.from("progress").delete().eq("user_id",S.user.id).eq("lesson_id",id); S.progress.delete(id); toast("Marcação removida."); }
+    else { const { error } = await sb.from("progress").insert({ user_id:S.user.id, lesson_id:id }); if(!error){ S.progress.add(id); toast("Aula concluída."); } }
+    aula(id); }
+  else if(d.baixar){ const { data, error } = await sb.storage.from("materiais").createSignedUrl(d.baixar, 600, { download:true }); if(error||!data){ toast("Não foi possível baixar."); return; } location.href = data.signedUrl; }
+  else if(d.entrega){ const id=+d.entrega, row={ task_id:id, user_id:S.user.id, texto:$("tx-"+id).value.trim()||null, link:$("lk-"+id).value.trim()||null };
+    const { data, error } = await sb.from("task_submissions").upsert(row,{ onConflict:"task_id,user_id" }).select().single();
+    if(error){ toast("Não foi possível entregar."); return; } S.subs[id] = data; toast("Tarefa entregue."); encontros(); }
+  else if(d.tab){ S.adminTab = d.tab; admin(); }
+  else if(d.liberar){ liberarAcesso(d.liberar, d.leadid); }
+  else if(d.edit){ editarAula(d.edit); }
+  else if(d.delmat){ if(!confirm("Remover este material?")) return; await sb.storage.from("materiais").remove([d.path]); await sb.from("materials").delete().eq("id", +d.delmat); t.closest(".mat").remove(); toast("Material removido."); }
+  else if(d.resp){ await sb.from("questions").update({ respondida:true }).eq("id", +d.resp); admEntregas(); }
+  else if(d.fb){ const { error } = await sb.from("task_submissions").update({ feedback:$("fb-"+d.fb).value }).eq("id", +d.fb); toast(error?"Erro ao salvar.":"Retorno salvo."); }
+  else if(d.act){
+    if(d.act==="duvida"){ const tx=$("duvida").value.trim(); if(!tx) return; const { error } = await sb.from("questions").insert({ user_id:S.user.id, lesson_id:+d.l, texto:tx }); if(!error){ $("duvida").value=""; toast("Dúvida enviada para a pauta do encontro."); } else toast("Não foi possível enviar."); }
+    else if(d.act==="csv") csv();
+    else if(d.act==="reload") admLeads();
+    else if(d.act==="libEmail") liberarAcesso($("libEmail").value);
+    else if(d.act==="novaAula") editarAula(null);
+    else if(d.act==="matGeral") materialGeral();
+    else if(d.act==="fechar") $("dlg").close();
+    else if(d.act==="sair") sair();
+  }
+});
+document.addEventListener("change", async e => {
+  const t = e.target;
+  if(t.dataset.stage) mudaEtapa(t.dataset.stage, t.value);
+  if(t.dataset.access){ const { error } = await sb.from("profiles").update({ access:t.value }).eq("id", t.dataset.access); toast(error?"Erro ao mudar acesso.":"Acesso: "+t.value); }
+});
+document.addEventListener("submit", e => { const f = e.target.closest("form[data-meet]"); if(f){ e.preventDefault(); salvaEncontro(f); } });
+/* arrastar leads entre colunas */
+document.addEventListener("dragstart", e => { const c = e.target.closest?.(".lead"); if(c) e.dataTransfer.setData("text/plain", c.dataset.lead); });
+document.addEventListener("dragover", e => { const col = e.target.closest?.(".col"); if(col){ e.preventDefault(); col.classList.add("over"); } });
+document.addEventListener("dragleave", e => { const col = e.target.closest?.(".col"); if(col) col.classList.remove("over"); });
+document.addEventListener("drop", e => { const col = e.target.closest?.(".col"); if(!col) return; e.preventDefault(); col.classList.remove("over"); const id = e.dataTransfer.getData("text/plain"); if(id) mudaEtapa(id, col.dataset.col); });
+
+/* ===== início ===== */
+async function entrar(session){
+  S.user = session.user;
+  await carregaTudo();
+  $("boot").hidden = true; $("login").hidden = true; $("app").hidden = false;
+  const nome = S.profile.nome || S.user.email;
+  $("meName").textContent = nome; $("av").textContent = (nome.trim()[0]||"D").toUpperCase();
+  $("meSub").textContent = isAdmin() ? "Administrador" : ativo() ? "Turma fundadora" : "Acesso pendente";
+  $("navAdmin").hidden = !isAdmin();
+  if(location.hash.includes("access_token")) history.replaceState(null, "", location.pathname);
+  render();
+}
+let entrou = false;
+sb.auth.onAuthStateChange((ev, session) => {
+  if(session && !entrou){ entrou = true; setTimeout(()=>entrar(session), 0); }
+  if(ev === "SIGNED_OUT"){ entrou = false; }
+});
+(async () => {
+  await carregaSettingsPublicas();
+  const { data: { session } } = await sb.auth.getSession();
+  if(session){ if(!entrou){ entrou = true; entrar(session); } }
+  else { $("boot").hidden = true; $("login").hidden = false; }
+})();
+</script>
+</body>
+</html>
